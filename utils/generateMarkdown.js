@@ -15,8 +15,7 @@ const writeToFile = (fileContent) => {
   });
 };
 
-// TODO: Create a function that returns a license badge based on which license is passed in
-// If there is no license, return an empty string
+// If there is no license, return an empty string, otherwise return badge and link
 function renderLicenseBadge(license) {
   if (!license || license === "None") {
     return "";
@@ -62,15 +61,86 @@ function renderLicenseBadge(license) {
   }
 }
 
+const renderInstallSection = installPresent => {
+  if (!installPresent) {
+    return "";
+  }
+  return `## Installation
+  ${installPresent}`;
+};
+
+const renderUsageSection = usagePresent => {
+  if (!usagePresent) {
+    return "";
+  }
+  return `## Usage
+  ${usagePresent}`;
+};
+
 // If there is no license, return an empty string
-const renderLicenseSection = license => {
-  if (!license || license === "None") {
+const renderLicenseSection = licensePresent => {
+  if (!licensePresent || licensePresent === "None") {
     return "";
   }
   return `## License
-  This application is covered under a(n) ${license} license.
+  This application is covered under a(n) ${licensePresent} license.
   `;
 };
+
+const renderContributionSection = contributionPresent => {
+  if (!contributionPresent) {
+    return "";
+  }
+  return `## Contributing
+  ${contributionPresent}`
+  };
+
+const renderTestSection = testPresent => {
+  if (!testPresent) {
+    return "";
+  }
+  return `## Tests
+  ${testPresent}`
+  };
+
+const dynamicTableOfContents = sectionCheck => {
+  let installation = renderInstallSection(sectionCheck.install);
+  let usage = renderUsageSection(sectionCheck.usage);
+  let license = renderLicenseSection(sectionCheck.license);
+  let contribution = renderContributionSection(sectionCheck.contribution);
+  let test = renderTestSection(sectionCheck.test);
+
+  if(installation){
+    installation = "- [Installation](#installation)";
+  }else{
+    installation = "";
+  }
+  if(usage){
+    usage = "- [Usage](#usage)";
+  }else{
+    usage = "";
+  }
+  if(license){
+    license = "- [License](#license)";
+  }else{
+    license = "";
+  }
+  if(contribution){
+    contribution = "- [Contributing](#contributing)";
+  }else{
+    contribution = "";
+  }
+  if(test){
+    test = "- [Tests](#tests)"
+  }else{
+    test = "";
+  }
+  return `${installation}
+  ${usage}
+  ${license}
+  ${contribution}
+  ${test}`
+}
 
 // TODO: Create a function to generate markdown for README
 const generateMarkdown = (data) => {
@@ -82,33 +152,21 @@ const generateMarkdown = (data) => {
   ${data.description}
 
   ## Table of Contents
-  1. [Installation](#installation)
-  2. [Usage](#usage)
-  3. [License](#license)
-  4. [Contributing](#contributing)
-  5. [Tests](#tests)
-  6. [Questions](#questions)
+  ${dynamicTableOfContents(data)}
+  - [Questions](#questions)
 
-  ## Installation
-  ${data.install}
+  ${renderInstallSection(data.install)}
 
-  ## Usage
-  ${data.usage}
+  ${renderUsageSection(data.usage)}
 
   ${renderLicenseSection(data.license)}
 
-  ## Contributing
-  ${data.contribution}
+  ${renderContributionSection(data.contribution)}
 
-  ## Tests
-  ${data.test}
+  ${renderTestSection(data.test)}
 
   ## Questions
-  For questions, comments, or suggestions, please reach out to [${
-    data.github
-  }](https://github.com/${data.github}) via email at <a href="mailto:${
-    data.email
-  }">${data.email}</a>.
+  For questions, comments, or suggestions, please reach out to [${data.github}](https://github.com/${data.github}) via email at <a href="mailto:${data.email}">${data.email}</a>.
 `;
 };
 
