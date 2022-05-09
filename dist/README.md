@@ -1,6 +1,6 @@
-# u
+# README Generator
   ## Description
-  x
+  Generates a README
 
   ## Table of Contents
   1. [Installation](#installation)
@@ -11,18 +11,19 @@
   6. [Questions](#questions)
 
   ## Installation
-  x
+  install
 
   ## Usage
-  x
+  usage
 
   ## License
 
 
   ## Contributing
-  x
+  contributions
 
   ## Tests
-  x
+  test
 
   ## Questions
+  For questions, comments, or suggestions, please reach out to [mjzabriskie](https://github.com/mjzabriskie) via email at <a href="mailto:zabriskie.m@gmail.com">zabriskie.m@gmail.com</a>.

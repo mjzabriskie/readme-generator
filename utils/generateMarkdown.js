@@ -57,6 +57,7 @@ const generateMarkdown = data => {
   ${data.test}
 
   ## Questions
+  For questions, comments, or suggestions, please reach out to [${data.github}](https://github.com/${data.github}) via email at <a href="mailto:${data.email}">${data.email}</a>.
 `;
 }
 
