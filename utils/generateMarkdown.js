@@ -62,46 +62,56 @@ function renderLicenseBadge(license) {
 }
 
 const renderInstallSection = installPresent => {
-  if (!installPresent) {
-    return "";
+  if (installPresent) {
+    sections.push("## Installation" + "\n" + installPresent);
+    return true;
   }
-  return `## Installation
-  ${installPresent}`;
 };
 
 const renderUsageSection = usagePresent => {
-  if (!usagePresent) {
-    return "";
+  if (usagePresent) {
+    sections.push("## Usage" + "\n" + usagePresent);
+    return true;
   }
-  return `## Usage
-  ${usagePresent}`;
 };
 
 // If there is no license, return an empty string
 const renderLicenseSection = licensePresent => {
-  if (!licensePresent || licensePresent === "None") {
-    return "";
+  if (licensePresent && licensePresent !== "None") {
+    sections.push("## License" + "\n" + "This application is covered under a(n) " + licensePresent + " license.");
+    return true;
   }
-  return `## License
-  This application is covered under a(n) ${licensePresent} license.
-  `;
 };
 
 const renderContributionSection = contributionPresent => {
-  if (!contributionPresent) {
-    return "";
+  if (contributionPresent) {
+    sections.push("## Contributing" + "\n" + contributionPresent);
+    return true;
   }
-  return `## Contributing
-  ${contributionPresent}`
-  };
+};
 
 const renderTestSection = testPresent => {
-  if (!testPresent) {
-    return "";
+  if (testPresent) {
+    sections.push("## Tests" + "\n" + testPresent);
+    return true;
   }
-  return `## Tests
-  ${testPresent}`
-  };
+};
+
+//initializing array to hold sections that have input
+const sections = [];
+
+/* dynamicTableOfContents, which calls the function to render each section,
+is called before dynamicSections, and therefore populates the sections array  */
+
+const dynamicSections = () => {
+  let finalSecStr = "";
+
+  sections.forEach(section => {
+    finalSecStr = finalSecStr + "\n" + section + "\n";
+  });
+
+  return finalSecStr;
+}
 
 const dynamicTableOfContents = sectionCheck => {
   let installation = renderInstallSection(sectionCheck.install);
@@ -109,64 +119,66 @@ const dynamicTableOfContents = sectionCheck => {
   let license = renderLicenseSection(sectionCheck.license);
   let contribution = renderContributionSection(sectionCheck.contribution);
   let test = renderTestSection(sectionCheck.test);
+  let questions = "[Questions](#questions)";
+  let finalTocStr = "";
+  const tocArray = [];
 
   if(installation){
-    installation = "- [Installation](#installation)";
+    installation = "[Installation](#installation)";
+    tocArray.push(installation);
   }else{
     installation = "";
   }
   if(usage){
-    usage = "- [Usage](#usage)";
+    usage = "[Usage](#usage)";
+    tocArray.push(usage);
   }else{
     usage = "";
   }
   if(license){
-    license = "- [License](#license)";
+    license = "[License](#license)";
+    tocArray.push(license);
   }else{
     license = "";
   }
   if(contribution){
-    contribution = "- [Contributing](#contributing)";
+    contribution = "[Contributing](#contributing)";
+    tocArray.push(contribution);
   }else{
     contribution = "";
   }
   if(test){
-    test = "- [Tests](#tests)"
+    test = "[Tests](#tests)"
+    tocArray.push(test);
   }else{
     test = "";
   }
-  return `${installation}
-  ${usage}
-  ${license}
-  ${contribution}
-  ${test}`
+  tocArray.push(questions);
+
+  tocArray.forEach((item, index) => {
+    let num = index + 1;
+    if(index == 0) {
+      finalTocStr = num + ". " + item;
+    } else {
+      finalTocStr = finalTocStr + "\n" + num + ". " + item;
+    }
+  });
+
+  return finalTocStr;
 }
 
 // TODO: Create a function to generate markdown for README
-const generateMarkdown = (data) => {
-  return `# <div style="display: flex; flex-wrap: wrap; justify-content: space-between"><div>${
-    data.title
-  }</div><div>${renderLicenseBadge(data.license)}</div></div>
+const generateMarkdown = data => {
+  return `# <div style="display: flex; flex-wrap: wrap; justify-content: space-between"><div>${data.title}</div><div>${renderLicenseBadge(data.license)}</div></div>
 
-  ## Description
-  ${data.description}
+## Description
+${data.description}
 
-  ## Table of Contents
-  ${dynamicTableOfContents(data)}
-  - [Questions](#questions)
-
-  ${renderInstallSection(data.install)}
-
-  ${renderUsageSection(data.usage)}
-
-  ${renderLicenseSection(data.license)}
-
-  ${renderContributionSection(data.contribution)}
-
-  ${renderTestSection(data.test)}
-
-  ## Questions
-  For questions, comments, or suggestions, please reach out to [${data.github}](https://github.com/${data.github}) via email at <a href="mailto:${data.email}">${data.email}</a>.
+## Table of Contents
+${dynamicTableOfContents(data)}
+${dynamicSections()}
+## Questions
+For questions, comments, or suggestions, please reach out to [${data.github}](https://github.com/${data.github}) via email at <a href="mailto:${data.email}">${data.email}</a>.
 `;
 };
 
