@@ -1,19 +1,7 @@
-// TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const {generateMarkdown, writeToFile} = require('./utils/generateMarkdown.js');
 
-const testDataObj = {
-    github: 'mjzabriskie',
-    email: 'zabriskie.m@gmail.com',
-    title: 'README Generator',
-    description: 'This is a CLI application meant to dynamically generate a README file based on user input.',
-    install: 'Fork repository on Git and run in VS Code.',
-    usage: 'Personal use only',
-    contribution: "Feel free to create a pull request on a forked repo, I'll review it when I have time.",
-    test: 'This section is a mystery to me *TEST*'
-  }
-
-// TODO: Create an array of questions for user input
+//An array of questions to gather user input
 const questions = [
     {
         type: "input",
@@ -110,13 +98,16 @@ const questions = [
     }
 ];
 
-// TODO: Create a function to initialize app
+//Function to initialized app
 const init = () => {
     console.log(`
     ======================
        README GENERATOR
     ======================
     Please answer the following questions to generate a README file.
+
+    NOTE: If prompted for a section that is not desired, simply hit
+    "Enter".
     `)
     return inquirer.prompt(questions);
 };

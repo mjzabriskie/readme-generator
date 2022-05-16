@@ -1,4 +1,6 @@
 const fs = require("fs");
+//initializing array to hold sections that have input
+const sections = [];
 
 const writeToFile = (fileContent) => {
   return new Promise((resolve, reject) => {
@@ -61,6 +63,8 @@ function renderLicenseBadge(license) {
   }
 }
 
+/*The following "render" functions return their namesake sections
+if a value is present.*/
 const renderInstallSection = installPresent => {
   if (installPresent) {
     sections.push("## Installation" + "\n" + installPresent);
@@ -75,7 +79,6 @@ const renderUsageSection = usagePresent => {
   }
 };
 
-// If there is no license, return an empty string
 const renderLicenseSection = licensePresent => {
   if (licensePresent && licensePresent !== "None") {
     sections.push("## License" + "\n" + "This application is covered under a(n) " + licensePresent + " license.");
@@ -97,12 +100,8 @@ const renderTestSection = testPresent => {
   }
 };
 
-//initializing array to hold sections that have input
-const sections = [];
-
-/* dynamicTableOfContents, which calls the function to render each section,
+/* NOTE: dynamicTableOfContents, which calls the function to render each section,
 is called before dynamicSections, and therefore populates the sections array  */
-
 const dynamicSections = () => {
   let finalSecStr = "";
 
@@ -113,6 +112,7 @@ const dynamicSections = () => {
   return finalSecStr;
 }
 
+//Checks each section to see if it should be added to table of contents
 const dynamicTableOfContents = sectionCheck => {
   let installation = renderInstallSection(sectionCheck.install);
   let usage = renderUsageSection(sectionCheck.usage);
@@ -167,7 +167,7 @@ const dynamicTableOfContents = sectionCheck => {
   return finalTocStr;
 }
 
-// TODO: Create a function to generate markdown for README
+//Template literal for the creation of the readme
 const generateMarkdown = data => {
   return `# <div style="display: flex; flex-wrap: wrap; justify-content: space-between"><div>${data.title}</div><div>${renderLicenseBadge(data.license)}</div></div>
 
